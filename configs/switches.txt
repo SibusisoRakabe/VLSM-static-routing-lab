@@ -1,0 +1,16 @@
+! Basic config for SW1 - SW4 (change the hostname on each)
+! The switches only forward frames in this lab, so no IP or VLAN config is needed.
+enable
+configure terminal
+hostname SW1
+no ip domain-lookup
+enable secret Lab-Only-Pass1
+service password-encryption
+banner motd # Authorized access only #
+line console 0
+ password Lab-Only-Pass1
+ login
+ logging synchronous
+exit
+end
+write memory

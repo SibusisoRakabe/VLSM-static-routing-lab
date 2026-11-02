@@ -1,0 +1,42 @@
+! R1 configuration
+enable
+configure terminal
+hostname R1
+no ip domain-lookup
+enable secret Lab-Only-Pass1
+service password-encryption
+banner motd # Authorized access only #
+
+line console 0
+ password Lab-Only-Pass1
+ login
+ logging synchronous
+exit
+
+! LAN1 (45 hosts) - 192.168.5.128/26
+interface GigabitEthernet0/0
+ description LAN1 to SW1
+ ip address 192.168.5.190 255.255.255.192
+ no shutdown
+exit
+
+! LAN2 (64 hosts) - 192.168.5.0/25
+interface GigabitEthernet0/1
+ description LAN2 to SW2
+ ip address 192.168.5.126 255.255.255.128
+ no shutdown
+exit
+
+! Point-to-point link to R2 - 192.168.5.240/30
+interface GigabitEthernet0/0/0
+ description Link to R2
+ ip address 192.168.5.241 255.255.255.252
+ no shutdown
+exit
+
+! Static routes to LAN3 and LAN4 via R2
+ip route 192.168.5.192 255.255.255.224 192.168.5.242
+ip route 192.168.5.224 255.255.255.240 192.168.5.242
+
+end
+write memory
